@@ -6,22 +6,19 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 export default function CommonCard({item,onEdit,onDelete}) {
     return (
         <View style={styles.card}>
-        <View style={{flex:0.1,justifyContent:'center',alignItems:'center'}}>
-            <MaterialCommunityIcons name={'note-text-outline'} size={20}/>
+            <View style={styles.cardContent}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text>{item.description}</Text>
+            </View>
+            <View style={styles.cardIcons}>
+                <TouchableOpacity onPress={onEdit}>
+                    <MaterialCommunityIcons name={'circle-edit-outline'} size={20} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={onDelete}>
+                    <MaterialCommunityIcons name={'delete-empty-outline'} size={20} />
+                </TouchableOpacity>
+            </View>
         </View>
-        <View style={{flex:0.7,justifyContent:'center',paddingLeft:10}}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text>{item.description}</Text>
-        </View>
-        <View style={{flex:0.2,flexDirection:'row',justifyContent:'space-around',alignItems:'center'}}>
-            <TouchableOpacity onPress={onEdit}>
-                <MaterialCommunityIcons name={'circle-edit-outline'} size={20} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={onDelete}>
-                <MaterialCommunityIcons name={'delete-empty-outline'} size={20} />
-            </TouchableOpacity>
-        </View>
-    </View>
     )
 }
 
@@ -40,6 +37,17 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         flexDirection:'row',
         borderRadius:3
+    },
+    cardContent:{
+        flex:0.8,
+        justifyContent:'center',
+        paddingLeft:10
+    },
+    cardIcons:{
+        flex:0.2,
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center'
     },
     title:{
         fontSize:15,
