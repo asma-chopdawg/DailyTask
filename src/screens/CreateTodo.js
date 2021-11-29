@@ -1,36 +1,40 @@
 import React, { useState } from 'react'
-import { FlatList, SafeAreaView,  ScrollView,  StyleSheet, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import CommonButton from '../components/common/CommonButton'
-import CommonCard from '../components/common/CommonCard'
 import CommonInput from '../components/common/CommonInput'
 import CommonText from '../components/common/CommonText'
-
+import { AddTodo } from '../store/actions/todoActions'
+import {useRoute} from '@react-navigation/native'
 const CreateTodo = ({navigation}) => {
+    const route = useRoute();
+    const isEditMode = route.params ? true : false;
+    console.log(isEditMode)
+    const dispatch = useDispatch()
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [tasks, setTasks] = useState([])
 
     const addTask=()=>{
-        let temp=[...tasks]
         const obj={
             title:title,
             description:description,
         }
-        temp.push(obj)
-        setTasks(temp)
+        dispatch(AddTodo(obj))
         setTitle('')
         setDescription('')
-    //    setTasks([...tasks,obj]) 
-    //    navigation.navigate("DisplayTodo",{
-    //        tasks:tasks
-    //    })
+        navigation.navigate("DisplayTodo")
+
     }
-    const removeTask=(index)=>{
+   
+    const editTask=(index)=>{
         console.log(index)
-        let filteredArray =tasks.filter(item => tasks.indexOf(item)!==index)
-        setTasks(filteredArray)
+        let temp = [ ...tasks ];
+        let filteredArray = tasks.filter(item => temp.indexOf(item)==index)
+        console.log(filteredArray)
+// temp[index] = {...markers[index], key: value};
+        // setTasks(temp)
     }
-    
     return (
         <View style={styles.container}>
             <View style={{flex:0.1,marginTop:10}}>
@@ -39,20 +43,11 @@ const CreateTodo = ({navigation}) => {
             <View style={{flex:0.9}}>
                 <CommonInput placeholder={"Enter Title"} onChangeText={(e)=>setTitle(e)} value={title}/>
                 <CommonInput placeholder={"Enter Description"} onChangeText={(e)=>setDescription(e)} value={description}/>
-                <CommonButton buttonText={"Add Task"} onPress={addTask}/>
-            </View>
-            <View style={{flex:1}}>
-            {
-                <FlatList
-                    data={tasks}
-                    renderItem={({item,index})=>{
-                    return(
-                        <CommonCard key={index} item={item} onDelete={()=>removeTask(index)} onEdit={()=>editTask()}/>
-                    )
-                    }}
-                    keyExtractor={item => item.id}
-                />
-            }
+                <CommonButton buttonText={!isEditMode ? 'Save' : 'Update'} onPress={
+                     !isEditMode
+                     ? () => addTask('save')
+                     : () => addTask('update')
+                }/>
             </View>
         </View>
     )

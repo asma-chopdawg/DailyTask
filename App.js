@@ -1,10 +1,15 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import AppNavigator from './src/navigation/AppNavigator'
-import TodoApp from './src/screens/TodoList'
+import rootReducer from './src/store/reducers'
+
+const store=createStore(rootReducer)
 
 export default function App() {
   return (
-    <AppNavigator/>
+    <Provider store={store}>
+      <AppNavigator/>
+    </Provider>
   )
 }
