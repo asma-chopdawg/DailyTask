@@ -17,11 +17,14 @@ const todoReducer = (state = initialState, action) => {
     case EDIT_TODO:
       return {
         ...state,
+        tasks:action.payload
       }
     case REMOVE_TODO:
+      const id=action.payload
+      const {tasks}=state
       return {
         ...state,
-        tasks:action.payload
+        tasks:tasks.filter(item => tasks.indexOf(item)!==id)
       }
   }
   return state

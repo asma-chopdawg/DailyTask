@@ -15,11 +15,7 @@ export default function TodoList({navigation}) {
             index:index
         })
     }
-    const onDelete=(index)=>{
-        let filteredArray = DATA.filter(item => DATA.indexOf(item)!==index)
-        dispatch(RemoveTodo(filteredArray))
-    }
-
+   
     return (
         <View style={{flex:1,paddingHorizontal:10}}>
            { 
@@ -28,7 +24,7 @@ export default function TodoList({navigation}) {
                 data={DATA}
                 renderItem={({item,index})=>{
                 return(
-                    <CommonCard key={index} item={item} onEdit={()=>onEdit(item,index)} onDelete={()=>onDelete(index)}/>
+                    <CommonCard key={index} item={item} onEdit={()=>onEdit(item,index)} onDelete={()=>dispatch(RemoveTodo(index))}/>
                 )
                 }}
                 keyExtractor={index => index}

@@ -4,22 +4,37 @@ import { useDispatch, useSelector } from 'react-redux'
 import CommonButton from '../components/common/CommonButton'
 import CommonInput from '../components/common/CommonInput'
 import CommonText from '../components/common/CommonText'
-import { AddTodo } from '../store/actions/todoActions'
+import { AddTodo, EditTodo } from '../store/actions/todoActions'
 import {useRoute} from '@react-navigation/native'
 
 const InitialStateData = {
     title:'',
     description:''
   };
-
+let index;
 const CreateTodo = ({navigation}) => {
     const dispatch = useDispatch() 
     const DATA = useSelector(state => state.todo.tasks);
     const route = useRoute();
+
     const isEditMode = route.params ? true : false;
-    const [tasks, setTasks] = useState(
-        !isEditMode ? InitialStateData : route.params?.item,
-    )
+ 
+    const [tasks, setTasks] = useState({...InitialStateData})
+
+    React.useEffect(() => {
+        index=route.params?.index
+        if(route?.params?.item){
+                setTasks(prevState => ({
+                    ...prevState,
+                    ['title']: route?.params?.item?.title,
+                    ['description']: route?.params?.item?.description,
+                  }));
+            }
+        return () => {
+            
+        }
+    }, [route])
+    
 
     const resetData = () => {
         setTasks({
@@ -43,11 +58,15 @@ const CreateTodo = ({navigation}) => {
                 description:tasks.description,
             }
             dispatch(AddTodo(obj))
-            }else{  
+            }
+            else{ 
+                const obj={
+                    title:tasks.title,
+                    description:tasks.description,
+                }
                 let temp=[...DATA]
-                let index=route?.params?.index
-                temp[index]={...DATA,tasks}
-                console.log(temp)
+                temp[index]=obj
+                dispatch(EditTodo(temp))    
             }
             resetData()
             navigation.navigate("DisplayTodo")
@@ -56,13 +75,7 @@ const CreateTodo = ({navigation}) => {
        }
     }
    
-    const editTask=(index)=>{
-        let temp = [ ...tasks ];
-        let filteredArray = tasks.filter(item => temp.indexOf(item)==index)
-        console.log(filteredArray)
-// temp[index] = {...markers[index], key: value};
-        // setTasks(temp)
-    }
+
     return (
         <View style={styles.container}>
             <View style={{flex:0.1,marginTop:10}}>
@@ -79,10 +92,11 @@ const CreateTodo = ({navigation}) => {
                     value={tasks.description}
                     onChangeText={(text)=>handleInputChange('description',text)} 
                     />
-                <CommonButton buttonText={!isEditMode ? 'Save' : 'Update'} onPress={
-                     !isEditMode
-                     ? () => addTask('Save')
-                     : () => addTask('Update')
+                <CommonButton buttonText={isEditMode ?'Update':'Save' } onPress={
+                     isEditMode
+                     ? () => addTask('Update')
+                     : () => addTask('Save')
+
                 }/>
             </View>
         </View>
