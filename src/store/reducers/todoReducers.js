@@ -15,7 +15,9 @@ const todoReducer = (state = initialState, action) => {
         tasks: [...state.tasks, action.payload]
       }
     case EDIT_TODO:
-      return [...state]
+      return {
+        ...state,
+      }
     case REMOVE_TODO:
       return {
         ...state,

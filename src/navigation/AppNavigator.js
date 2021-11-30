@@ -18,3 +18,16 @@ function AppNavigator() {
 }
 
 export default AppNavigator;
+
+
+
+
+ 
+// const editTask=(index)=>{
+  // console.log(index)
+  // let temp = [ ...tasks ];
+  // let filteredArray = tasks.filter(item => temp.indexOf(item)==index)
+  // console.log(filteredArray)
+  // temp[index] = {...markers[index], key: value};
+  // setTasks(temp)
+// }

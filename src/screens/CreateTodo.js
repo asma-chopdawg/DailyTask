@@ -6,29 +6,57 @@ import CommonInput from '../components/common/CommonInput'
 import CommonText from '../components/common/CommonText'
 import { AddTodo } from '../store/actions/todoActions'
 import {useRoute} from '@react-navigation/native'
+
+const InitialStateData = {
+    title:'',
+    description:''
+  };
+
 const CreateTodo = ({navigation}) => {
+    const dispatch = useDispatch() 
+    const DATA = useSelector(state => state.todo.tasks);
     const route = useRoute();
     const isEditMode = route.params ? true : false;
-    console.log(isEditMode)
-    const dispatch = useDispatch()
-    const [title, setTitle] = useState('')
-    const [description, setDescription] = useState('')
-    const [tasks, setTasks] = useState([])
+    const [tasks, setTasks] = useState(
+        !isEditMode ? InitialStateData : route.params?.item,
+    )
 
-    const addTask=()=>{
-        const obj={
-            title:title,
-            description:description,
-        }
-        dispatch(AddTodo(obj))
-        setTitle('')
-        setDescription('')
-        navigation.navigate("DisplayTodo")
-
+    const resetData = () => {
+        setTasks({
+            title:'',
+            description:''
+        });
+    };
+    
+    const handleInputChange = (key, value) => {
+        setTasks(prevState => ({
+          ...prevState,
+          [key]: value,
+        }));
+    };
+    
+    const addTask=async (action)=>{
+       try{
+        if(action==='Save'){
+            const obj={
+                title:tasks.title,
+                description:tasks.description,
+            }
+            dispatch(AddTodo(obj))
+            }else{  
+                let temp=[...DATA]
+                let index=route?.params?.index
+                temp[index]={...DATA,tasks}
+                console.log(temp)
+            }
+            resetData()
+            navigation.navigate("DisplayTodo")
+       }catch(err){
+           console.log(err)
+       }
     }
    
     const editTask=(index)=>{
-        console.log(index)
         let temp = [ ...tasks ];
         let filteredArray = tasks.filter(item => temp.indexOf(item)==index)
         console.log(filteredArray)
@@ -41,12 +69,20 @@ const CreateTodo = ({navigation}) => {
                 <CommonText title={'Todo Task'} customStyle={styles.title}/>
             </View>
             <View style={{flex:0.9}}>
-                <CommonInput placeholder={"Enter Title"} onChangeText={(e)=>setTitle(e)} value={title}/>
-                <CommonInput placeholder={"Enter Description"} onChangeText={(e)=>setDescription(e)} value={description}/>
+                <CommonInput 
+                    placeholder={"Enter Title"} 
+                    value={tasks.title}
+                    onChangeText={(text)=>handleInputChange('title',text)} 
+                />
+                <CommonInput 
+                    placeholder={"Enter Description"}
+                    value={tasks.description}
+                    onChangeText={(text)=>handleInputChange('description',text)} 
+                    />
                 <CommonButton buttonText={!isEditMode ? 'Save' : 'Update'} onPress={
                      !isEditMode
-                     ? () => addTask('save')
-                     : () => addTask('update')
+                     ? () => addTask('Save')
+                     : () => addTask('Update')
                 }/>
             </View>
         </View>

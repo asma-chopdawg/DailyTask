@@ -9,13 +9,13 @@ export default function TodoList({navigation}) {
     const DATA = useSelector(state => state.todo.tasks);
     const dispatch = useDispatch()
 
-    const onEdit=(item)=>{
+    const onEdit=(item,index)=>{
         navigation.navigate('CreateTodo',{
-            item:item
+            item:item,
+            index:index
         })
     }
     const onDelete=(index)=>{
-        console.log(index)
         let filteredArray = DATA.filter(item => DATA.indexOf(item)!==index)
         dispatch(RemoveTodo(filteredArray))
     }
@@ -28,10 +28,10 @@ export default function TodoList({navigation}) {
                 data={DATA}
                 renderItem={({item,index})=>{
                 return(
-                    <CommonCard key={index} item={item} onEdit={()=>onEdit(item)} onDelete={()=>onDelete(index)}/>
+                    <CommonCard key={index} item={item} onEdit={()=>onEdit(item,index)} onDelete={()=>onDelete(index)}/>
                 )
                 }}
-                keyExtractor={item => item.id}
+                keyExtractor={index => index}
             />
         :
         <View style={{flex:1,justifyContent:"center",alignItems:'center'}}>
