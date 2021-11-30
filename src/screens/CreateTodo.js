@@ -16,25 +16,29 @@ const CreateTodo = ({navigation}) => {
     const dispatch = useDispatch() 
     const DATA = useSelector(state => state.todo.tasks);
     const route = useRoute();
-
-    const isEditMode = route.params ? true : false;
+    const [isEditMode, setIsEditMode] = useState(false)
  
     const [tasks, setTasks] = useState({...InitialStateData})
-
+    const onSelect = data => {
+        console.log(onSe)
+      };
     React.useEffect(() => {
-        index=route.params?.index
-        if(route?.params?.item){
+
+        const unsubscribe = navigation.addListener('focus', () => {
+            console.log("object***",route)
+            index=route.params?.index
+            if(route.params!==undefined){
+                setIsEditMode(true)
                 setTasks(prevState => ({
                     ...prevState,
                     ['title']: route?.params?.item?.title,
                     ['description']: route?.params?.item?.description,
-                  }));
+                }));
             }
-        return () => {
             
-        }
-    }, [route])
-    
+        });
+        return unsubscribe;
+      }, [route]);
 
     const resetData = () => {
         setTasks({
@@ -73,9 +77,7 @@ const CreateTodo = ({navigation}) => {
        }catch(err){
            console.log(err)
        }
-    }
-   
-
+    }   
     return (
         <View style={styles.container}>
             <View style={{flex:0.1,marginTop:10}}>

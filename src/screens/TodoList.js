@@ -1,7 +1,9 @@
 import React from 'react'
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View,Button } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux'
 import CommonCard from '../components/common/CommonCard'
+import CommonHeader from '../components/common/CommonHeader';
 import { RemoveTodo } from '../store/actions/todoActions';
 
 export default function TodoList({navigation}) {
@@ -18,6 +20,7 @@ export default function TodoList({navigation}) {
    
     return (
         <View style={{flex:1,paddingHorizontal:10}}>
+            <CommonHeader onPress={()=>navigation.goBack()}/>
            { 
            DATA.length>0 ?
             <FlatList

@@ -9,9 +9,11 @@ const Stack = createNativeStackNavigator();
 function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+        headerShown:false
+      }}>
         <Stack.Screen name="CreateTodo" component={CreateTodo} />
-        <Stack.Screen name="DisplayTodo" component={TodoList} />
+        <Stack.Screen name="DisplayTodo" component={TodoList}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
