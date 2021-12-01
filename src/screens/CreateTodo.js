@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import CommonButton from '../components/common/CommonButton'
 import CommonInput from '../components/common/CommonInput'
@@ -19,15 +19,13 @@ const CreateTodo = ({navigation}) => {
     const [isEditMode, setIsEditMode] = useState(false)
  
     const [tasks, setTasks] = useState({...InitialStateData})
-    const onSelect = data => {
-        console.log(onSe)
-      };
+   
     React.useEffect(() => {
 
         const unsubscribe = navigation.addListener('focus', () => {
             console.log("object***",route)
             index=route.params?.index
-            if(route.params!==undefined){
+            if(route.params?.item){
                 setIsEditMode(true)
                 setTasks(prevState => ({
                     ...prevState,
@@ -110,7 +108,8 @@ export default CreateTodo
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        paddingHorizontal:20
+        paddingHorizontal:20,
+        paddingTop:30
     },
     title:{
         textAlign:'center',

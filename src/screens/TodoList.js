@@ -20,7 +20,10 @@ export default function TodoList({navigation}) {
    
     return (
         <View style={{flex:1,paddingHorizontal:10}}>
-            <CommonHeader onPress={()=>navigation.goBack()}/>
+            <CommonHeader onPress={()=>navigation.goBack('CreateTodo',{
+            item:null,
+            index:null
+        })}/>
            { 
            DATA.length>0 ?
             <FlatList
